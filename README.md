@@ -1,2 +1,3 @@
 # W.E.D.I
-Ai familia
+
+Web3 Enchanced Decentralized Intelengent
