@@ -1,41 +1,72 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
-import torch
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Asisten</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fefefe;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+    }
 
-# Set device
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Device: {device}")
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #eee;
+    }
 
-# Load tokenizer & model
-model_id = "HuggingFaceH4/zephyr-7b-beta"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16 if device=="cuda" else torch.float32)
-model.to(device)
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
 
-# Pipeline untuk text generation
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0 if device == "cuda" else -1)
+    .chat-box {
+      margin-top: 30px;
+      width: 90%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-# Format prompt untuk chat
-def format_prompt(user_input):
-    return f"<|system|>\nKamu adalah W.E.D.I, asisten AI yang ramah.\n<|user|>\n{user_input}\n<|assistant|>"
+    input[type="text"] {
+      flex: 1;
+      padding: 15px;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
 
-# Fungsi AI
-class WEDI:
-    def __init__(self):
-        self.history = []
+    .send-button {
+      background-color: #10a37f;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 50%;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-    def ask(self, user_input):
-        prompt = format_prompt(user_input)
-        result = pipe(prompt, max_new_tokens=200, do_sample=True, temperature=0.7)[0]["generated_text"]
-        response = result.split("<|assistant|>")[-1].strip()
-        return response
+  <!-- Ganti src dengan gambar kamu -->
+  <img src="your-image.jpg" alt="Foto Profil" class="profile-img">
 
-# Program utama
-if __name__ == "__main__":
-    ai = WEDI()
-    print("Halo! Saya W.E.D.I, asisten cerdas Anda. Tanyakan apa saja.")
-    while True:
-        user_input = input("Anda: ")
-        if user_input.lower() in ["exit", "keluar"]:
-            break
-        response = ai.ask(user_input)
-        print("W.E.D.I:", response)
+  <div class="title">Apa yang bisa saya bantu?</div>
+
+  <div class="chat-box">
+    <input type="text" placeholder="Tanyakan apa saja" />
+    <button class="send-button">&#8593;</button>
+  </div>
+
+</body>
+</html>
