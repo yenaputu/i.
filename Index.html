@@ -112,15 +112,19 @@
       appendMessage("user", message);
       input.value = "";
 
-      // Ganti URL ini dengan endpoint W.E.D.I kamu
-      const response = await fetch("https://your-wedi-endpoint/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
+      try {
+        const response = await fetch("http://localhost:5000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
 
-      const data = await response.json();
-      appendMessage("bot", data.response || "Maaf, tidak ada balasan.");
+        const data = await response.json();
+        appendMessage("bot", data.response || "Maaf, tidak ada balasan.");
+      } catch (err) {
+        appendMessage("bot", "Gagal menghubungi server. Pastikan backend Flask berjalan.");
+        console.error("Error:", err);
+      }
     }
 
     function appendMessage(sender, text) {
