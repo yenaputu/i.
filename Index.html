@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot GPT Hitam</title>
+  <title>Chatbot W.E.D.I</title>
   <style>
     body {
       margin: 0;
@@ -99,8 +99,6 @@
   </footer>
 
   <script>
-    const apiKey = "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"; // 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
-
     async function kirimPesan() {
       const input = document.getElementById("pesan");
       const pesanUser = input.value.trim();
@@ -110,21 +108,14 @@
       chat.innerHTML += `<div class="pesan user"><strong>Kamu:</strong> ${pesanUser}</div>`;
       input.value = "";
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: pesanUser }]
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: pesanUser })
       });
 
-      const data = await response.json();
-      const balasan = data.choices?.[0]?.message?.content || "Maaf, terjadi kesalahan.";
-      chat.innerHTML += `<div class="pesan bot"><strong>Bot:</strong> ${balasan}</div>`;
+      const data = await res.json();
+      chat.innerHTML += `<div class="pesan bot"><strong>Bot:</strong> ${data.response}</div>`;
       chat.scrollTop = chat.scrollHeight;
     }
   </script>
