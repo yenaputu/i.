@@ -2,71 +2,122 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>AI Asisten</title>
+  <title>Chatbot W.E.D.I</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #fefefe;
       margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 50px;
     }
-
-    .profile-img {
-      width: 150px;
-      height: 150px;
+    header {
+      text-align: center;
+      margin-top: 50px;
+    }
+    header img {
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
-      border: 4px solid #eee;
     }
-
-    .title {
-      font-size: 24px;
-      font-weight: bold;
+    h2 {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+    #chat-container {
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px;
+      background-color: #111;
+      border-radius: 10px;
+      padding: 20px;
+      height: 300px;
+      overflow-y: auto;
+    }
+    #input-area {
+      display: flex;
+      justify-content: center;
+      width: 90%;
+      max-width: 600px;
       margin-top: 20px;
     }
-
-    .chat-box {
-      margin-top: 30px;
-      width: 90%;
-      max-width: 500px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    input[type="text"] {
+    input {
       flex: 1;
-      padding: 15px;
-      border-radius: 30px;
-      border: 1px solid #ccc;
+      padding: 12px;
       font-size: 16px;
-    }
-
-    .send-button {
-      background-color: #10a37f;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50%;
       border: none;
-      font-size: 20px;
+      border-radius: 25px;
+      outline: none;
+      background-color: #222;
+      color: #fff;
+    }
+    button {
+      margin-left: 10px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background-color: #333;
+      color: #fff;
       cursor: pointer;
+    }
+    .pesan {
+      margin: 10px 0;
+    }
+    .user {
+      color: #4caf50;
+    }
+    .bot {
+      color: #03a9f4;
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #999;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- Ganti src dengan gambar kamu -->
-  <img src="your-image.jpg" alt="Foto Profil" class="profile-img">
+  <header>
+    <img src="https://i.ibb.co/ZHzL7xj/foto-profil-chat.png" alt="Foto Profil">
+    <h2>mbah sng nganake pis</h2>
+  </header>
 
-  <div class="title">Apa yang bisa saya bantu?</div>
+  <div id="chat-container"></div>
 
-  <div class="chat-box">
-    <input type="text" placeholder="Tanyakan apa saja" />
-    <button class="send-button">&#8593;</button>
+  <div id="input-area">
+    <input type="text" id="pesan" placeholder="Tanyakan apa saja" />
+    <button onclick="kirimPesan()">↑</button>
   </div>
 
+  <footer>
+    Dengan mengirim pesan berarti Anda menyetujui <a href="#" style="color:#888;">Persyaratan</a> dan <a href="#" style="color:#888;">Privasi</a>.
+  </footer>
+
+  <script>
+    async function kirimPesan() {
+      const input = document.getElementById("pesan");
+      const pesanUser = input.value.trim();
+      if (!pesanUser) return;
+
+      const chat = document.getElementById("chat-container");
+      chat.innerHTML += `<div class="pesan user"><strong>Kamu:</strong> ${pesanUser}</div>`;
+      input.value = "";
+
+      const res = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: pesanUser })
+      });
+
+      const data = await res.json();
+      chat.innerHTML += `<div class="pesan bot"><strong>Bot:</strong> ${data.response}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
 </body>
 </html>
